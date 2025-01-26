@@ -1,0 +1,6 @@
+apiVersion: v2
+name: my-python-server
+description: A simple Python HTTP server deployed on Kubernetes using Helm
+version: 0.1.0
+appVersion: "1.0"
+

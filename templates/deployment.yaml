@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-python-server
+  labels:
+    app: my-python-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-python-server
+  template:
+    metadata:
+      labels:
+        app: my-python-server
+    spec:
+      containers:
+        - name: my-python-server
+          image: kirillermolaev/my-python-server:latest  # Используем образ из Docker Hub
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              memory: "128Mi"  # Минимальное количество памяти, которое контейнер будет использовать
+              cpu: "250m"      # Минимальное количество CPU
+            limits:
+              memory: "256Mi"  # Максимальное количество памяти, которое контейнер может использовать
+              cpu: "500m"      # Максимальное количество CPU
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 10  # Задержка перед первой проверкой
+            periodSeconds: 10        # Интервал между проверками
+            failureThreshold: 3      # Количество неудачных попыток перед перезапуском контейнера
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 5   # Задержка перед первой проверкой
+            periodSeconds: 5         # Интервал между проверками
+            failureThreshold: 3      # Количество неудачных попыток перед тем, как контейнер будет считаться неготовым
+
